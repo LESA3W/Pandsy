@@ -88,7 +88,23 @@ Per-lead tracking, live in the Sheet — template rotation, send time, **open ti
 
 ![Lead tracking columns](docs/screenshots/sheet/tracking.jpg)
 
-**Browse a sample →** [`docs/sheet/full-leads-sample.csv`](docs/sheet/full-leads-sample.csv) — GitHub renders it as a sortable, searchable table, so you can walk the FULL LEADS tab row by row: scrape → score → filter → generate → email → track. Sanitized showcase data (fictional businesses, `555` numbers, placeholder place IDs); no real lead is exposed.
+A sanitized slice of the **FULL LEADS** tab — one row per business, walking the lifecycle `scraped → scored → filtered → generated → emailed → tracked`. Showcase data only (fictional businesses, `555` numbers); no real lead is exposed.
+
+| Business | Vertical | Score | Status | Site | Email sent | Opened | Reply / Call |
+|---|---|:--:|---|---|---|---|---|
+| Coastal Motors Auto Care | Auto Repair | 4 | converted | [live](https://auto-repair-t-1.vercel.app) | 06/13 10:54 | 06/13 13:02 | ✅ called 06/20 |
+| Summit Auto Works | Auto Repair | 4 | replied | [live](https://auto-repair-t-2.vercel.app) | 06/13 10:54 | 06/14 16:49 | 💬 replied +1d |
+| Redline Garage | Auto Repair | 3 | site_ready | [live](https://auto-repair-t-3.vercel.app) | 06/13 10:56 | 06/13 14:56 | — |
+| Voltage Electric | Electricians | 4 | emailed | [live](https://electricians-t-1.vercel.app) | 06/13 10:56 | 06/13 11:45 | — |
+| Bright Spark Electric | Electricians | 4 | emailed | [live](https://electricians-t-2.vercel.app) | 06/13 10:58 | — | — |
+| Current Masters | Electricians | 3 | site_ready | [live](https://electricians-t-3.vercel.app) | 06/13 11:02 | 06/13 12:33 | — |
+| Tidewater Plumbing | Plumbers | 4 | converted | [live](https://plumbers-t-1.vercel.app) | 06/13 11:04 | 06/13 15:20 | ✅ called 06/18 |
+| Blue Valve Plumbing | Plumbers | 3 | emailed | [live](https://plumbers-t-2.vercel.app) | 06/13 11:06 | 06/13 18:02 | — |
+| Cascade Rooter | Plumbers | 3 | emailed | [live](https://plumbers-t-3.vercel.app) | 06/13 11:08 | — | — |
+| Harbor Point Automotive | Auto Repair | 4 | approved | *(queued)* | — | — | — |
+| Lumen Electrical Co | Electricians | 4 | approved | *(queued)* | — | — | — |
+| Copperline Plumbing | Plumbers | 4 | generating | *(building)* | — | — | — |
+| Mesa Auto Clinic | Auto Repair | 1 | skipped — already has a site | — | — | — | — |
 
 ---
 
