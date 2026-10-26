@@ -1,6 +1,6 @@
-# Pandsy — Up to 2,000 Personalized Sites Built & Pitched Daily
+# Pandsy — Up to 375 Personalized Sites Built & Pitched Daily
 
-> An automated pipeline engineered to generate up to **2,000 personalized, individually-branded websites a day** — one for every local business scraped — and pitch each one straight to its owner by cold email. Scrape → build → deploy → outreach → track, all orchestrated from a single Google Sheet.
+> An automated pipeline that scrapes local-business leads across the US, generates and deploys a polished, individually-branded website for each one in ~90 seconds, then cold-emails it straight to the owner — ramping to **~375 sites pitched per day** across 15 warmed inboxes. Scrape → build → deploy → outreach → track, all orchestrated from a single Google Sheet.
 
 Private-origin project (2026), published as an archive. Not a product, not open source. Infrastructure endpoints and credentials have been stripped.
 
@@ -17,12 +17,12 @@ Most local businesses — auto-repair garages, plumbers, electricians — have n
 Everything ran off one **Google Sheet** acting as the lead database and the control panel. Each row was a business; its columns drove scraping, generation, deployment, emailing, and tracking.
 
 **By the numbers**
-- **up to 2,000 sites/day** — generation capacity at full throughput
+- **~375 sites/day** pitched at full ramp — 15 warmed inboxes × 25 sends/inbox/day
 - **~90 seconds** per site — scrape data in, live URL out
 - **~$0 generation cost** — template-based, **no LLM tokens** at render time
 - **9 designs** — 3 verticals × 3 template variants, picked by business type
-- **~1,750** qualified US leads in the database after cleaning
-- **270 emails/day** at full ramp, rotated across 15 warmed inboxes (deliverability-capped, independent of build volume)
+- **~2,000** qualified US lead stock, scraped and scored continuously
+- **~$150/month** all-in infrastructure at steady state
 
 ---
 
@@ -75,36 +75,62 @@ flowchart LR
 
 The entire operation was driven by one spreadsheet. No dashboards, no DB UI — just tabs and columns that every workflow reads and writes.
 
-- **FULL LEADS** — the master list: business data, score, status (`scraping_done → approved → emailed → …`), the generated Site URL, and the tracking columns (**Opened / Clicked / Replied / Unsubscribed**) that tick as the campaign runs.
-- **PLANNING** — the week-by-week cold-email roadmap (warmup → ramp → regime).
-- **EMAIL-TEMPLATES**, **SEND-LOG**, **INBOX-STATUS** — template pool, per-send log, and per-inbox daily caps.
-- **SCORE banners** — the list is segmented by lead quality (SCORE 1–4).
+- **FULL LEADS** — the master list: business data, lead score, `Status`, the generated Site URL, and the tracking columns (**Opened / Clicked / Replied / Called**) that tick as the campaign runs.
+- **COLD EMAIL CAMPAIGN** — the week-by-week send roadmap (warmup → ramp → regime, up to 375 mails/day across 15 inboxes).
+- **INBOX-STATUS** — per-inbox daily cap and usage (25/inbox/day → 375 total).
+- **EMAIL-TEMPLATES** — the rotating template pool with per-template stats.
+- **COSTS / LEADS** and **COMPTABILITE** — per-scrape cost + yield, and the running cost ledger.
 
-The cold-email campaign was ramped week by week — warmup → ramp → 375 mails/day across 15 inboxes:
+### The `Status` column — the state machine
 
-![Cold-email campaign ramp](docs/screenshots/sheet/campaign.jpg)
+Every row advances through the `Status` field, and each value is the signal that tells the next workflow whether to pick the row up:
 
-Per-lead tracking, live in the Sheet — template rotation, send time, **open time**, clicks, replies, calls (lead PII redacted):
+| Status | Meaning |
+|---|---|
+| `scraping_done` | Workflow A scraped, enriched (phone, email, logo, reviews) and **scored** the lead. Sitting in the pool. |
+| `approved` | Passed the quality gate (good score, **no existing website**) → eligible for site generation. |
+| `generating` | Workflow B **locked** the row and the generator is building + deploying the site (the lock prevents double-processing). |
+| `emailed` | Workflow C sent the cold email — an inbox + template were assigned and logged to SEND-LOG. |
+| `called` | An inbound call from the prospect was logged via call-tracking — the hottest signal. |
+| `skipped` | Filtered out — the business already has a real website, so no site is built. |
+| `failed` / `timeout` | Generation or send errored; the row is reset for a later retry. |
 
-![Lead tracking columns](docs/screenshots/sheet/tracking.jpg)
+Leads are also segmented by quality with **SCORE 1–4** banners, highest-intent first.
 
-A sanitized slice of the **FULL LEADS** tab — one row per business, walking the lifecycle `scraped → scored → filtered → generated → emailed → tracked`. Showcase data only (fictional businesses, `555` numbers); no real lead is exposed.
+### FULL LEADS — the master tab
 
-| Business | Vertical | Score | Status | Site | Email sent | Opened | Reply / Call |
-|---|---|:--:|---|---|---|---|---|
-| Coastal Motors Auto Care | Auto Repair | 4 | converted | [live](https://auto-repair-t-1.vercel.app) | 06/13 10:54 | 06/13 13:02 | ✅ called 06/20 |
-| Summit Auto Works | Auto Repair | 4 | replied | [live](https://auto-repair-t-2.vercel.app) | 06/13 10:54 | 06/14 16:49 | 💬 replied +1d |
-| Redline Garage | Auto Repair | 3 | site_ready | [live](https://auto-repair-t-3.vercel.app) | 06/13 10:56 | 06/13 14:56 | — |
-| Voltage Electric | Electricians | 4 | emailed | [live](https://electricians-t-1.vercel.app) | 06/13 10:56 | 06/13 11:45 | — |
-| Bright Spark Electric | Electricians | 4 | emailed | [live](https://electricians-t-2.vercel.app) | 06/13 10:58 | — | — |
-| Current Masters | Electricians | 3 | site_ready | [live](https://electricians-t-3.vercel.app) | 06/13 11:02 | 06/13 12:33 | — |
-| Tidewater Plumbing | Plumbers | 4 | converted | [live](https://plumbers-t-1.vercel.app) | 06/13 11:04 | 06/13 15:20 | ✅ called 06/18 |
-| Blue Valve Plumbing | Plumbers | 3 | emailed | [live](https://plumbers-t-2.vercel.app) | 06/13 11:06 | 06/13 18:02 | — |
-| Cascade Rooter | Plumbers | 3 | emailed | [live](https://plumbers-t-3.vercel.app) | 06/13 11:08 | — | — |
-| Harbor Point Automotive | Auto Repair | 4 | approved | *(queued)* | — | — | — |
-| Lumen Electrical Co | Electricians | 4 | approved | *(queued)* | — | — | — |
-| Copperline Plumbing | Plumbers | 4 | generating | *(building)* | — | — | — |
-| Mesa Auto Clinic | Auto Repair | 1 | skipped — already has a site | — | — | — | — |
+Scored leads with full business data (lead emails + phones redacted), alongside the generation + outreach columns that write back live (Pandsy inboxes redacted):
+
+<table>
+<tr>
+<td width="50%"><a href="docs/screenshots/sheet/full-leads-1.jpg"><img src="docs/screenshots/sheet/full-leads-1.jpg" alt="FULL LEADS — scored leads, business data (SCORE 1)"></a></td>
+<td width="50%"><a href="docs/screenshots/sheet/full-leads-2.jpg"><img src="docs/screenshots/sheet/full-leads-2.jpg" alt="FULL LEADS — site generation and outreach tracking"></a></td>
+</tr>
+</table>
+
+![FULL LEADS — scored leads, business data (SCORE 2–4)](docs/screenshots/sheet/full-leads-3.jpg)
+
+### The other tabs
+
+**COLD EMAIL CAMPAIGN** — warmup → ramp → 375 mails/day, week by week:
+
+![COLD EMAIL CAMPAIGN](docs/screenshots/sheet/email-campaign.jpg)
+
+**INBOX-STATUS** — 15 inboxes, 25 sends/inbox/day = 375/day cap (Pandsy addresses redacted):
+
+![INBOX-STATUS](docs/screenshots/sheet/inbox-status.jpg)
+
+**EMAIL-TEMPLATES** — the rotating template pool:
+
+![EMAIL-TEMPLATES](docs/screenshots/sheet/email-templates.jpg)
+
+**COSTS / LEADS** — per-scrape cost and lead yield, by score:
+
+![COSTS / LEADS](docs/screenshots/sheet/costs-leads.jpg)
+
+**COMPTABILITE** — the running cost ledger, ~$150/mo at steady state (founder names + personal split redacted):
+
+![COMPTABILITE](docs/screenshots/sheet/comptabilite.jpg)
 
 ---
 
