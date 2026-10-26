@@ -141,7 +141,7 @@ Scored leads with full business data (lead emails + phones redacted), alongside 
 
 ![COSTS / LEADS](docs/screenshots/sheet/costs-leads.jpg)
 
-**COMPTABILITE** — the running cost ledger, ~$150/mo at steady state (founder names + personal split redacted):
+**COMPTABILITE** — the shared expense ledger: every tool and its cost, ~$153/mo at steady state:
 
 ![COMPTABILITE](docs/screenshots/sheet/comptabilite.jpg)
 
