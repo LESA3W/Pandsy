@@ -1,12 +1,16 @@
-# Pandsy — Up to 375 Personalized Sites Built & Pitched Daily
+# Pandsy — A GTM Engine That Built & Pitched 2,887 Local-Business Websites
 
-> An automated pipeline that scrapes local-business leads across the US, generates and deploys a polished, individually-branded website for each one in ~90 seconds, then cold-emails it straight to the owner — ramping to **~375 sites pitched per day** across 15 warmed inboxes. Scrape → build → deploy → outreach → track, all orchestrated from a single Google Sheet.
+> An automated go-to-market pipeline that scraped US local-business leads, generated and deployed a polished, individually-branded website for each one in ~90 seconds, then cold-emailed it straight to the owner. **14,575 leads, 2,887 sites built, across 218 cities and 48 states — in 4 months, by 2 people.** Scrape → build → deploy → outreach → track, all orchestrated from a single Google Sheet.
 
 Private-origin project (2026), published as an archive. Not a product, not open source. Infrastructure endpoints and credentials have been stripped.
 
 <p align="center">
   <img src="docs/banner.png" alt="Pandsy — Better websites. More clients." width="520">
 </p>
+
+> 📄 **Full write-up:** [**Pandsy — GTM Engineer**](docs/pandsy-gtm-engineer.pdf) — the lead pipeline (Workflow A, 54 nodes) built and explained stage by stage, with real run economics and an honest lessons-learned.
+
+**Built by 2 people in 4 months** — Paul and his co-founder **Stan** — fully self-funded, each working from their own personal Claude Max subscription.
 
 ---
 
@@ -17,12 +21,12 @@ Most local businesses — auto-repair garages, plumbers, electricians — have n
 Everything ran off one **Google Sheet** acting as the lead database and the control panel. Each row was a business; its columns drove scraping, generation, deployment, emailing, and tracking.
 
 **By the numbers**
-- **~375 sites/day** pitched at full ramp — 15 warmed inboxes × 25 sends/inbox/day
-- **~90 seconds** per site — scrape data in, live URL out
+- **14,575 leads** scraped, enriched and scored across **218 cities, 48 states**
+- **2,887 websites built** — one per qualified lead, ~90 seconds each
+- **~720 leads/day** at full tilt; cold-email sends ramped to **375/day** across 15 warmed inboxes
+- **40.7%** email open rate
 - **~$0 generation cost** — template-based, **no LLM tokens** at render time
-- **9 designs** — 3 verticals × 3 template variants, picked by business type
-- **~2,000** qualified US lead stock, scraped and scored continuously
-- **~$150/month** all-in infrastructure at steady state
+- **$637.99 total spend** — self-funded, 2 people, 4 months
 
 ---
 
@@ -95,7 +99,16 @@ Every row advances through the `Status` field, and each value is the signal that
 | `skipped` | Filtered out — the business already has a real website, so no site is built. |
 | `failed` / `timeout` | Generation or send errored; the row is reset for a later retry. |
 
-Leads are also segmented by quality with **SCORE 1–4** banners, highest-intent first.
+Leads are also segmented into four **SCORE** tiers, set by how much the pipeline could recover — highest-intent first:
+
+| Score | What was recovered | Count |
+|:--:|---|--:|
+| **1** | Phone + email + logo + font — the perfect lead | 718 |
+| **2** | Phone + email + logo (no font) | 79 |
+| **3** | Phone + email (no logo) | 3,195 |
+| **4** | Phone only — **not emailable** | 10,583 |
+
+Only Scores 1–3 are emailable (**3,992 leads**); Score 4 was kept for a possible call campaign.
 
 ### FULL LEADS — the master tab
 
@@ -140,6 +153,8 @@ Three workflows do the work (shown here from a local re-import of the real expor
 
 **Workflow A — Lead Scraper**
 ![Workflow A](docs/screenshots/workflows/workflow-a.png)
+
+> 📄 The full 54-node run — its seven stages, filters and per-lead economics — is documented in the [**GTM Engineer write-up**](docs/pandsy-gtm-engineer.pdf).
 
 **Workflow B — Site Generator**
 ![Workflow B](docs/screenshots/workflows/workflow-b.png)
