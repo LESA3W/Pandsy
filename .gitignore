@@ -19,8 +19,8 @@ dist/
 .builds/
 *.tsbuildinfo
 
-# screenshots cache / design audits
-screenshots/
+# generator runtime screenshots cache / design audits (NOT docs/screenshots)
+/generator/screenshots/
 .design-audit*/
 .deploy-*/
 
