@@ -1,6 +1,6 @@
-# Pandsy — Automated Website Generation & Cold-Email Outreach at Scale
+# Pandsy — Up to 2,000 Personalized Sites Built & Pitched Daily
 
-> A full pipeline that scraped local-business leads across the US, generated and deployed a polished, individually-branded website for each one in ~90 seconds, then ran the cold-email campaign and tracking around it — all orchestrated from a single Google Sheet.
+> An automated pipeline engineered to generate up to **2,000 personalized, individually-branded websites a day** — one for every local business scraped — and pitch each one straight to its owner by cold email. Scrape → build → deploy → outreach → track, all orchestrated from a single Google Sheet.
 
 Private-origin project (2026), published as an archive. Not a product, not open source. Infrastructure endpoints and credentials have been stripped.
 
@@ -17,11 +17,12 @@ Most local businesses — auto-repair garages, plumbers, electricians — have n
 Everything ran off one **Google Sheet** acting as the lead database and the control panel. Each row was a business; its columns drove scraping, generation, deployment, emailing, and tracking.
 
 **By the numbers**
+- **up to 2,000 sites/day** — generation capacity at full throughput
 - **~90 seconds** per site — scrape data in, live URL out
 - **~$0 generation cost** — template-based, **no LLM tokens** at render time
 - **9 designs** — 3 verticals × 3 template variants, picked by business type
 - **~1,750** qualified US leads in the database after cleaning
-- **270 emails/day** at full ramp, rotated across 15 warmed inboxes
+- **270 emails/day** at full ramp, rotated across 15 warmed inboxes (deliverability-capped, independent of build volume)
 
 ---
 
@@ -87,6 +88,8 @@ Per-lead tracking, live in the Sheet — template rotation, send time, **open ti
 
 ![Lead tracking columns](docs/screenshots/sheet/tracking.jpg)
 
+**Browse a sample →** [`docs/sheet/full-leads-sample.csv`](docs/sheet/full-leads-sample.csv) — GitHub renders it as a sortable, searchable table, so you can walk the FULL LEADS tab row by row: scrape → score → filter → generate → email → track. Sanitized showcase data (fictional businesses, `555` numbers, placeholder place IDs); no real lead is exposed.
+
 ---
 
 ## The n8n pipeline
@@ -101,11 +104,6 @@ Three workflows do the work (shown here from a local re-import of the real expor
 
 **Workflow C — Cold-Email Sender**
 ![Workflow C](docs/screenshots/workflows/workflow-c.png)
-
-<details><summary>All workflows (overview)</summary>
-
-![n8n overview](docs/screenshots/workflows/overview.png)
-</details>
 
 ---
 
