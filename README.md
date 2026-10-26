@@ -4,7 +4,9 @@
 
 Private-origin project (2026), published as an archive. Not a product, not open source. Infrastructure endpoints and credentials have been stripped.
 
-![Generated site — Coastal Motors (Auto Repair template 3)](docs/screenshots/templates/auto-repair-t-3.png)
+<p align="center">
+  <img src="docs/banner.png" alt="Pandsy — Better websites. More clients." width="520">
+</p>
 
 ---
 
@@ -46,6 +48,19 @@ flowchart LR
     GMAIL --> PROSPECT(("Prospect"))
     PROSPECT -. opens · clicks · replies · calls .-> SHEET
     SITE --> SHEET
+
+    classDef sheet fill:#fbbf24,stroke:#b45309,color:#111827,font-weight:bold;
+    classDef wf fill:#3b82f6,stroke:#1e40af,color:#ffffff;
+    classDef gen fill:#10b981,stroke:#047857,color:#ffffff;
+    classDef host fill:#111827,stroke:#000000,color:#ffffff;
+    classDef mail fill:#ef4444,stroke:#b91c1c,color:#ffffff;
+    classDef prospect fill:#a855f7,stroke:#7e22ce,color:#ffffff;
+    class SHEET sheet;
+    class A,B,C wf;
+    class GEN,SHOT gen;
+    class VERCEL,SITE host;
+    class GMAIL mail;
+    class PROSPECT prospect;
 ```
 
 1. **Scrape — Workflow A.** Pulls US local businesses from the Google Places API (name, address, phone, hours, Google reviews, category) into the Sheet, and builds the correct *"leave a review"* link for each (`writereview?placeid=…`). Leads are scored and anything that already has a real website is filtered out (a Playwright site-check tests each prospect's domain).
