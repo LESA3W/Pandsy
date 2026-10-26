@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Mobile: lock the page horizontally — it must not pan/drift sideways.
+   overflow-x:clip (not hidden) so it never breaks position:sticky. */
+@media (max-width: 767px) {
+  html,
+  body {
+    overflow-x: clip;
+    overscroll-behavior-x: none;
+  }
+}
+
+/* CLEARLINE / CLEAN WATER SERVICE — base resets + reduced-motion guard. */
+
+:root {
+  color-scheme: light;
+}
+
+html, body {
+  background-color: #ffffff;
+  color: #000000;
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* Native <select> arrow uses black to match the system. */
+select {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23000000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 12px 8px;
+}
+
+/* Smooth scroll for in-page anchors. */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Default focus ring tuned to primary CSS var. */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Selection uses primary color. */
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-primary-text);
+}
+
+/* prefers-reduced-motion — disable all transitions and animations. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print: hide chrome (cookies, sticky rescue). */
+@media print {
+  .print\:hidden { display: none !important; }
+}
+
+/* Interactive elements show a hand cursor; disabled shows not-allowed. */
+button:not(:disabled), a[href], label[for], select, summary,
+[role="button"], [role="link"], [role="tab"],
+input[type="submit"], input[type="button"], input[type="reset"],
+input[type="checkbox"], input[type="radio"] { cursor: pointer; }
+button:disabled, [aria-disabled="true"] { cursor: not-allowed; }

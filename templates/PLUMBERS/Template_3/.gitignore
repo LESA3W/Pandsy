@@ -1,0 +1,17 @@
+# Next.js
+.next/
+out/
+
+# Dependencies
+node_modules/
+
+# Preview pipeline
+.preview/
+
+# Local env (use root .env.preview instead — see claude.md rule #10)
+.env.local
+.env*.local
+
+# Misc
+*.tsbuildinfo
+next-env.d.ts.tmp

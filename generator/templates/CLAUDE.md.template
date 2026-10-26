@@ -1,0 +1,55 @@
+# Project: {BUSINESS_NAME}
+
+This is a Next.js website project for **{BUSINESS_NAME}**, a {BUSINESS_TYPE} 
+located in {CITY} ({ZIP}). 
+
+Full business data is in `business-info.json` if you need any detail not 
+covered here.
+
+## ⚠️ CRITICAL RULE — ZERO EXCEPTION
+**ALWAYS invoke the `/frontend-design` skill before writing any frontend code.**
+Every step. Every component. No exception.
+
+## Tech Stack
+- **Next.js 15** (App Router) — ⚠️ Read `node_modules/next/dist/docs/` 
+  before writing code, breaking changes vs your training data
+- **TypeScript**
+- **Tailwind CSS**
+- **pnpm** (NOT npm)
+- **Deploy target:** Vercel (`--scope lesa3ws-projects`)
+
+## Language
+**ALL content in ENGLISH (US).** No French, no Lorem Ipsum.
+
+## Business Quick Reference
+- Name: {BUSINESS_NAME}
+- Type: {BUSINESS_TYPE}
+- Phone: {PHONE}
+- Address: {FULL_ADDRESS}
+- Hours: {HOURS}
+- Services: {SERVICES}
+- Target customer: {TARGET_DESCRIPTION}
+
+## NAP Consistency (CRITICAL FOR SEO)
+The Name/Address/Phone/Hours above must be IDENTICAL everywhere on the site 
+(header, footer, contact page, schema.org JSON-LD). Verify with `grep` if 
+uncertain.
+
+## Project Files
+- `business-info.json` — full business data (logo URL, images, etc.)
+- `design-system.md` — colors, fonts, spacing (created at Step 3)
+- `tasks/research.md` — competitive research (created at Step 2)
+- `tasks/todo.md` — architecture plan (created at Step 1)
+
+## Workflow Reminders
+- This is a **headless** Claude Code session (single PTY, kept warm across steps)
+- Use `pnpm`, never `npm`
+- Test with `pnpm run build` before deploy
+- Don't commit unless explicitly asked
+- The Resend API key is already in `.env.local` — DON'T create new keys
+- The Vercel scope is `lesa3ws-projects`
+
+## Step Sentinel Pattern
+After completing each step, the prompt will ask you to run a `touch` command 
+on a sentinel file. This is your signal that the step is finished. Always 
+run it as your final action when the step is complete.

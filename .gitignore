@@ -1,0 +1,41 @@
+# deps
+node_modules/
+.pnpm-store/
+
+# secrets / env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+auth.json
+credentials*.json
+
+# builds / caches
+.next/
+out/
+dist/
+.vercel/
+.builds/
+*.tsbuildinfo
+
+# screenshots cache / design audits
+screenshots/
+.design-audit*/
+.deploy-*/
+
+# logs
+logs/
+*.log
+
+# backups / junk
+*.bak
+*.bak-*
+*.backup
+*.backup-*
+*.legacy
+.template-rotation.json
+
+# os
+.DS_Store
+Thumbs.db

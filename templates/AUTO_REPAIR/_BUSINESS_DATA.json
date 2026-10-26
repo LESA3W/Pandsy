@@ -1,0 +1,58 @@
+{
+  "_README": "Fictional but realistic business data used for visual preview during template development. Source files keep {{PLACEHOLDERS}} literal. This JSON is only used by scripts/preview.mjs to populate .preview/. The pipeline replaces these via sed at runtime with real client data.",
+
+  "BUSINESS_NAME": "Coastal Motors Auto Care",
+  "BUSINESS_TYPE": "Auto Repair Shop",
+  "CITY": "San Diego",
+  "STATE": "CA",
+  "ZIP": "92101",
+  "FULL_ADDRESS": "1247 Pacific Highway, San Diego, CA 92101",
+  "PHONE": "(619) 555-0142",
+  "PHONE_DIGITS": "16195550142",
+  "HOURS": "Mon-Fri 7:30am-6pm, Sat 8am-3pm, Sun Closed",
+  "SERVICES": "Engine diagnostics, Brake repair, Oil changes, Transmission service, Suspension repair, AC service, Pre-purchase inspections, Fleet maintenance",
+  "TARGET_DESCRIPTION": "Local car owners aged 25-65 looking for a trustworthy mechanic with honest pricing.",
+  "EMAIL": "service@coastalmotors-fake.com",
+
+  "LOGO_URL_LIGHT": "https://lh3.googleusercontent.com/d/10T4xdo5Sz9xjRUjdpxMYGZQf3_gO1oFo",
+  "LOGO_URL_DARK": "https://lh3.googleusercontent.com/d/1WiFYzli592Wh050xFpBWBb4KOhdlp-GU",
+  "LOGO_COLORS": "",
+
+  "HERO": "https://lh3.googleusercontent.com/d/1QLXml8OHYN7uzcxNi_pE-mezawH0fPmz",
+  "ABOUT": "https://lh3.googleusercontent.com/d/1sDHiHcH4Rdu9EHrU6lIkSTosjs6LEjud",
+  "SERVICES_IMAGE": "https://lh3.googleusercontent.com/d/1nB0RHxFzf9Uo-QK_7wTFyloEn4Ele62V",
+  "GALLERY_1": "https://lh3.googleusercontent.com/d/1EF2JIe8o3Y46VHXRCqAH6lQ3LCu4MXmS",
+  "GALLERY_2": "https://lh3.googleusercontent.com/d/1oSKG_DqC44hA4w183EegKkU8dJtYD74u",
+  "CTA": "https://lh3.googleusercontent.com/d/1wpZ-Ve65vwSGU3cJ_g1WH9HT-Dww3bGf",
+
+  "GOOGLE_LOGO_URL": "https://lh3.googleusercontent.com/d/1QaO3Y80XCZKpaEvRT2JGoTnTl9qebGKn",
+  "GOOGLE_RATING": "4.6",
+  "GOOGLE_REVIEW_COUNT": "87",
+  "GOOGLE_REVIEW_URL": "https://search.google.com/local/writereview?placeid=ChIJ0UH-Nu-bVA0RO9uQeYi6NfA",
+  "GOOGLE_MAPS_URL": "https://www.google.com/maps/place/?q=place_id:ChIJ0UH-Nu-bVA0RO9uQeYi6NfA",
+
+  "INSTAGRAM_URL": "https://www.instagram.com/coastalmotors_fake",
+  "FACEBOOK_URL": "https://www.facebook.com/coastalmotors_fake",
+  "TIKTOK_URL": "https://www.tiktok.com/@coastalmotors_fake",
+  "TWITTER_URL": "https://twitter.com/coastalmotors_fake",
+
+  "REVIEW_1": "Two other shops couldn't pin down a vibration that had bugged me for weeks. These guys diagnosed it in under an hour, fixed it the same day, and charged less than the dealer wanted just to look at it. They explained everything in plain language instead of burying me in jargon. I am not taking my car anywhere else.",
+  "REVIEW_1_NAME": "Brandon M.",
+  "REVIEW_1_STARS": "5",
+  "REVIEW_1_DATE": "1 week ago",
+
+  "REVIEW_2": "Brought my car in expecting a long list of expensive repairs. They told me it was fine and sent me on my way. That kind of integrity earns a customer for life.",
+  "REVIEW_2_NAME": "Jessica R.",
+  "REVIEW_2_STARS": "5",
+  "REVIEW_2_DATE": "6 months ago",
+
+  "REVIEW_3": "Needed brakes done and they showed me the worn pads before replacing anything. Detailed quote up front, no surprise charges at the end, and the work came with a real warranty. Clean and professional from start to finish.",
+  "REVIEW_3_NAME": "Daniel K.",
+  "REVIEW_3_STARS": "5",
+  "REVIEW_3_DATE": "1 year ago",
+
+  "REVIEW_4": "Came in for an oil change and left with a clear inspection report and zero pressure to add anything. Quick service, fair pricing, and they took the time to explain what to keep an eye on. Will be back.",
+  "REVIEW_4_NAME": "Sofia M.",
+  "REVIEW_4_STARS": "5",
+  "REVIEW_4_DATE": "2 years ago"
+}

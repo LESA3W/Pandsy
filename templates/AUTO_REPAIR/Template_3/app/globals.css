@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Mobile: lock the page horizontally — it must not pan/drift sideways.
+   overflow-x:clip (not hidden) so it never breaks position:sticky. */
+@media (max-width: 767px) {
+  html,
+  body {
+    overflow-x: clip;
+    overscroll-behavior-x: none;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: var(--font-sans), system-ui, sans-serif;
+  }
+
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-primary-text);
+  }
+
+  /* Heading defaults — modern brutalist sans, NOT condensed industrial (T1) and NOT slab serif (T2) */
+  h1, h2, h3, h4 {
+    font-family: var(--font-display), Helvetica, Arial, sans-serif;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+  }
+
+  /* Form fields default to a dark-mode look so inputs in QuoteForm + ContactForm
+     match the surface without per-input overrides. */
+  input, textarea, select {
+    color-scheme: dark;
+  }
+}
+
+@layer utilities {
+  .container-tight {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .container-tight {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .container-tight {
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+    }
+  }
+
+  /* Small caps utility, used on NightTag, trust signals, photo captions */
+  .small-caps {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 500;
+  }
+
+  /* Photographic vignette — pure-black radial darkening on Hero/CTA/Gallery. */
+  .vignette {
+    background: radial-gradient(
+      ellipse at center,
+      transparent 0%,
+      rgba(0, 0, 0, 0) 30%,
+      rgba(0, 0, 0, 0.55) 70%,
+      rgba(0, 0, 0, 0.95) 100%
+    );
+  }
+
+  /* Halation — warm light-leak, top-left bias. Tinted with the client's
+     primary brand color so the glow tracks the brand, not a fixed amber. */
+  .halation {
+    background: radial-gradient(
+      circle at 22% 28%,
+      color-mix(in srgb, var(--color-primary) 24%, transparent) 0%,
+      color-mix(in srgb, var(--color-primary) 12%, transparent) 30%,
+      transparent 60%
+    );
+  }
+
+  /* Stronger CTA halation — used on the CtaSection only */
+  .halation-strong {
+    background: radial-gradient(
+      ellipse at 30% 35%,
+      color-mix(in srgb, var(--color-primary) 38%, transparent) 0%,
+      color-mix(in srgb, var(--color-primary) 20%, transparent) 35%,
+      transparent 70%
+    );
+  }
+
+  /* Glow — soft brand-primary radial behind a CTA button on hover */
+  .sodium-glow {
+    box-shadow:
+      0 0 24px color-mix(in srgb, var(--color-primary) 45%, transparent),
+      0 0 60px color-mix(in srgb, var(--color-primary) 22%, transparent);
+  }
+
+  /* Ambient card surface — faint brand-tinted dark gradient + neutral border */
+  .ambient-surface {
+    background: linear-gradient(155deg, color-mix(in srgb, var(--color-primary) 8%, #000) 0%, #000000 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Interactive elements show a hand cursor; disabled shows not-allowed. */
+button:not(:disabled), a[href], label[for], select, summary,
+[role="button"], [role="link"], [role="tab"],
+input[type="submit"], input[type="button"], input[type="reset"],
+input[type="checkbox"], input[type="radio"] { cursor: pointer; }
+button:disabled, [aria-disabled="true"] { cursor: not-allowed; }

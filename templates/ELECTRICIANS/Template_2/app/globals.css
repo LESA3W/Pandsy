@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Mobile: lock the page horizontally — it must not pan/drift sideways.
+   overflow-x:clip (not hidden) so it never breaks position:sticky. */
+@media (max-width: 767px) {
+  html,
+  body {
+    overflow-x: clip;
+    overscroll-behavior-x: none;
+  }
+}
+
+/* BLUEPRINT / GRID — base layer
+   Tokens (color, font) are defined in tailwind.config.ts.
+   Per-client {{LOGO_COLORS}} are injected as CSS vars in app/layout.tsx. */
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: theme("fontFamily.sans");
+  }
+  /* Selection in primary yellow, black text */
+  ::selection {
+    background-color: var(--color-primary);
+    color: #000000;
+  }
+  /* Subtle focus rings for keyboard nav */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  /* Drop default arrow on selects so the design controls the look */
+  select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8' fill='none'><path d='M1 1l6 6 6-6' stroke='%23000000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 12px 8px;
+    padding-right: 38px;
+  }
+}
+
+/* Reduced motion guard — disables transforms / animations entirely. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Interactive elements show a hand cursor; disabled shows not-allowed. */
+button:not(:disabled), a[href], label[for], select, summary,
+[role="button"], [role="link"], [role="tab"],
+input[type="submit"], input[type="button"], input[type="reset"],
+input[type="checkbox"], input[type="radio"] { cursor: pointer; }
+button:disabled, [aria-disabled="true"] { cursor: not-allowed; }

@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS variables (--color-primary/secondary/accent + font-family vars) are
+   injected from app/layout.tsx — placeholders are not resolved inside
+   plain CSS files, so we cannot put them here. */
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: #000000;
+  color: #ffffff;
+  /* Subtle concrete grain across the entire site, low-opacity so it never
+     distracts from photography or copy. */
+  background-image:
+    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+  background-size: 24px 24px, 36px 36px;
+}
+
+body {
+  font-family: var(--font-sans, system-ui, -apple-system, "Segoe UI", sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mobile: lock the page horizontally — it must not pan/drift sideways.
+   overflow-x:clip (not hidden) so it never breaks position:sticky. */
+@media (max-width: 767px) {
+  html,
+  body {
+    overflow-x: clip;
+    overscroll-behavior-x: none;
+  }
+}
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+}
+
+/* Workshop scrollbar — thin, mechanical */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #404040 #000000;
+}
+
+/* Focus ring — visible for keyboard users, tied to per-client primary */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Reduced motion — kill the marquee + heavy animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Utility — clipped corner frame used on imagery/cards */
+.clip-corner {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 18px) 0,
+    100% 18px,
+    100% 100%,
+    18px 100%,
+    0 calc(100% - 18px)
+  );
+}
+
+.clip-corner-sm {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 10px) 0,
+    100% 10px,
+    100% 100%,
+    10px 100%,
+    0 calc(100% - 10px)
+  );
+}
+
+/* Cookie consent banner slide-up animation */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Interactive elements show a hand cursor; disabled shows not-allowed. */
+button:not(:disabled), a[href], label[for], select, summary,
+[role="button"], [role="link"], [role="tab"],
+input[type="submit"], input[type="button"], input[type="reset"],
+input[type="checkbox"], input[type="radio"] { cursor: pointer; }
+button:disabled, [aria-disabled="true"] { cursor: not-allowed; }

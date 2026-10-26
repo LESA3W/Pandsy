@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Mobile: lock the page horizontally — it must not pan/drift sideways.
+   overflow-x:clip (not hidden) so it never breaks position:sticky. */
+@media (max-width: 767px) {
+  html,
+  body {
+    overflow-x: clip;
+    overscroll-behavior-x: none;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #faf6ef;
+    color: #1a1a17;
+    font-family: var(--font-sans), system-ui, sans-serif;
+    background-image:
+      radial-gradient(circle at 30% 40%, rgba(0, 0, 0, 0.025) 1px, transparent 1.5px),
+      radial-gradient(circle at 75% 65%, rgba(0, 0, 0, 0.018) 1px, transparent 1.5px);
+    background-size: 32px 32px, 44px 44px;
+  }
+
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-primary-text);
+  }
+
+  /* Heading defaults . slab serif for display, NOT condensed industrial */
+  h1, h2, h3, h4 {
+    font-family: var(--font-display), Georgia, serif;
+    color: #1a1a17;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  .container-tight {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-tight {
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+    }
+  }
+
+  /* Small caps utility, used on SectionLabel and trust signals */
+  .small-caps {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 500;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Interactive elements show a hand cursor; disabled shows not-allowed. */
+button:not(:disabled), a[href], label[for], select, summary,
+[role="button"], [role="link"], [role="tab"],
+input[type="submit"], input[type="button"], input[type="reset"],
+input[type="checkbox"], input[type="radio"] { cursor: pointer; }
+button:disabled, [aria-disabled="true"] { cursor: not-allowed; }

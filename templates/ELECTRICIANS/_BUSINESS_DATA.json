@@ -1,0 +1,57 @@
+{
+  "_README": "Fictional but realistic business data used for visual preview during template development. Source files keep {{PLACEHOLDERS}} literal. This JSON is only used by scripts/preview.mjs to populate .preview/. The pipeline replaces these via sed at runtime with real client data.",
+
+  "BUSINESS_NAME": "Voltage Electric",
+  "BUSINESS_TYPE": "Electrician",
+  "CITY": "Austin",
+  "STATE": "TX",
+  "ZIP": "78704",
+  "FULL_ADDRESS": "3158 South Lamar Blvd, Austin, TX 78704",
+  "PHONE": "(512) 555-0173",
+  "PHONE_DIGITS": "15125550173",
+  "HOURS": "Mon-Fri 7am-7pm, Sat 8am-3pm, 24/7 emergency line",
+  "SERVICES": "Panel upgrades, Lighting installation, Outlet & switch repair, EV charger installation, Generator installation, Electrical inspections, Emergency service, Smart home wiring",
+  "TARGET_DESCRIPTION": "Homeowners and small business owners needing licensed electrical work, often urgent.",
+  "EMAIL": "service@voltageelectric-fake.com",
+
+  "LOGO_URL_LIGHT": "https://lh3.googleusercontent.com/d/10T4xdo5Sz9xjRUjdpxMYGZQf3_gO1oFo",
+  "LOGO_URL_DARK": "https://lh3.googleusercontent.com/d/1WiFYzli592Wh050xFpBWBb4KOhdlp-GU",
+  "LOGO_COLORS": "#f5b50a,#fbbf24,#eab308",
+
+  "HERO": "https://lh3.googleusercontent.com/d/13OBV4yX0wi50ASLCmUGJiK79Q0b6AoDF",
+  "ABOUT": "https://lh3.googleusercontent.com/d/1X0q1EHv0GAzbrG2NhZElWDQeD_uiQfAf",
+  "SERVICES_IMAGE": "https://lh3.googleusercontent.com/d/1GlZjwi55T_EtDWBpnUX2wubdDuIOGtYR",
+  "GALLERY_1": "https://lh3.googleusercontent.com/d/1GgVnw3WSH_0UpAPczUcl-kej2agyYF9V",
+  "CTA": "https://lh3.googleusercontent.com/d/16IMe7Fe40RetJn-oZ1-EauIzJeo2GeYo",
+
+  "GOOGLE_LOGO_URL": "https://lh3.googleusercontent.com/d/1QaO3Y80XCZKpaEvRT2JGoTnTl9qebGKn",
+  "GOOGLE_RATING": "4.7",
+  "GOOGLE_REVIEW_COUNT": "178",
+  "GOOGLE_REVIEW_URL": "https://search.google.com/local/writereview?placeid=ChIJ_voltageelectric_austin_tx",
+  "GOOGLE_MAPS_URL": "https://www.google.com/maps/place/?q=place_id:ChIJ_voltageelectric_austin_tx",
+
+  "INSTAGRAM_URL": "https://www.instagram.com/voltageelectric_fake",
+  "FACEBOOK_URL": "https://www.facebook.com/voltageelectric_fake",
+  "TIKTOK_URL": "https://www.tiktok.com/@voltageelectric_fake",
+  "TWITTER_URL": "https://twitter.com/voltage_fake",
+
+  "REVIEW_1": "Had three electricians out to quote a panel upgrade. This was the only crew that actually pulled the cover off and showed me what was wrong before giving a number. Cleaner work, fair price, and they handled all the permits. The kind of team you keep on call for whatever comes up next.",
+  "REVIEW_1_NAME": "Ryan B.",
+  "REVIEW_1_STARS": "5",
+  "REVIEW_1_DATE": "3 weeks ago",
+
+  "REVIEW_2": "Lost power to half the house on a weekend night. Someone was at the door within the hour, found the problem, and fixed it on the spot. Charged exactly what was quoted on the phone.",
+  "REVIEW_2_NAME": "Lauren H.",
+  "REVIEW_2_STARS": "5",
+  "REVIEW_2_DATE": "5 months ago",
+
+  "REVIEW_3": "Installed an EV charger in the garage in a single day. Clean conduit run, no torn-up drywall, and they labeled the new breaker properly. Already booked them again for more work.",
+  "REVIEW_3_NAME": "Devon W.",
+  "REVIEW_3_STARS": "5",
+  "REVIEW_3_DATE": "10 months ago",
+
+  "REVIEW_4": "Wanted a full inspection before moving into an older home. They spent a couple of hours and gave me a written report with photos, prioritizing what needed fixing now versus later. No scare tactics and no upsells, just straight answers.",
+  "REVIEW_4_NAME": "Sarah K.",
+  "REVIEW_4_STARS": "5",
+  "REVIEW_4_DATE": "2 years ago"
+}
