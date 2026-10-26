@@ -1,24 +1,25 @@
-# Pandsy — Automated Website Generation & Outreach for Local Businesses
+# Pandsy — Automated Website Generation & Cold-Email Outreach at Scale
 
-> An end-to-end pipeline that scraped local-business leads, generated a polished, deployed website for each one in ~90 seconds, and ran the cold-outreach + tracking around it — all driven from a single spreadsheet.
+> A full pipeline that scraped local-business leads across the US, generated and deployed a polished, individually-branded website for each one in ~90 seconds, then ran the cold-email campaign and tracking around it — all orchestrated from a single Google Sheet.
 
-Private archive of a personal project (2026). Not a product, not open source. Infrastructure endpoints and credentials have been stripped from this repository.
+Private-origin project (2026), published as an archive. Not a product, not open source. Infrastructure endpoints and credentials have been stripped.
 
-![Pandsy generated site — MSV33](docs/screenshots/msv33-hero.png)
+![Generated site — Coastal Motors (Auto Repair template 3)](docs/screenshots/templates/auto-repair-t-3.png)
 
 ---
 
 ## What it was
 
-Local businesses (auto-repair garages, plumbers, electricians) often have no website or a bad one. Pandsy turned a list of such businesses into **individually-branded, production-deployed websites at scale**, then used those live sites as the hook for cold outreach.
+Most local businesses — auto-repair garages, plumbers, electricians — have no website or a bad one. Pandsy turned a scraped list of them into **production-deployed, individually-branded websites at scale**, then used each live site as the hook for a cold-email campaign: *"here's a free website I built for your shop — want it?"*
 
-The whole thing ran from a Google Sheet acting as the lead database and control panel. Each row was a business; columns drove generation, deployment, email, and tracking.
+Everything ran off one **Google Sheet** acting as the lead database and the control panel. Each row was a business; its columns drove scraping, generation, deployment, emailing, and tracking.
 
-**Key numbers**
-- **~90 seconds** end-to-end per site (scrape data in → live URL out)
-- **~$0 per site** in generation cost — template-based, **no LLM tokens** at render time
-- **3 verticals × 3 template variants** = 9 distinct designs, picked by business type
-- Hundreds of sites generated across the run
+**By the numbers**
+- **~90 seconds** per site — scrape data in, live URL out
+- **~$0 generation cost** — template-based, **no LLM tokens** at render time
+- **9 designs** — 3 verticals × 3 template variants, picked by business type
+- **~1,750** qualified US leads in the database after cleaning
+- **270 emails/day** at full ramp, rotated across 15 warmed inboxes
 
 ---
 
@@ -26,48 +27,96 @@ The whole thing ran from a Google Sheet acting as the lead database and control 
 
 ```mermaid
 flowchart LR
-    A[Google Sheet<br/>lead database] --> B
+    SHEET[("Google Sheet<br/>FULL LEADS — the brain")]
 
-    subgraph n8n [n8n orchestration]
+    subgraph n8n [n8n orchestration · self-hosted]
       direction TB
-      WA[Workflow A<br/>Lead scraper<br/>Google Places] --> WB[Workflow B<br/>Site generator]
-      WB --> WC[Workflow C<br/>Cold outreach]
-      WC --> TR[Trackers<br/>opens · clicks · replies<br/>unsubscribe · inbound calls]
+      A["Workflow A<br/>Lead Scraper<br/>(Google Places)"]
+      B["Workflow B<br/>Site Generator"]
+      C["Workflow C<br/>Cold-Email Sender<br/>+ tracking"]
+      A --> B --> C
     end
 
-    B[n8n] --> GEN
-    GEN[Generator engine<br/>Node / Express] --> VERCEL[Vercel<br/>deploy]
-    GEN --> SHOT[Headless screenshots]
-    VERCEL --> SITE[(Live site<br/>business.example.com)]
-    TR --> A
-    SITE --> A
+    SHEET --> A
+    B --> GEN["Generator engine<br/>(Node / Express)"]
+    GEN --> VERCEL["Vercel<br/>per-site deploy"]
+    GEN --> SHOT["Headless screenshots"]
+    VERCEL --> SITE[("business.pandsy.com")]
+    C --> GMAIL["Gmail API<br/>15 rotating inboxes"]
+    GMAIL --> PROSPECT(("Prospect"))
+    PROSPECT -. opens · clicks · replies · calls .-> SHEET
+    SITE --> SHEET
 ```
 
-1. **Scrape** — Workflow A pulls local businesses from the Google Places API (name, address, phone, reviews, hours, category) into the Sheet.
-2. **Generate** — Workflow B picks the next lead, calls the generator engine on the server: it selects a template by business type, injects the real business data (name, services, reviews, images), builds the Next.js site, deploys it to Vercel, disables deployment protection, and captures hero + full-page screenshots. The live URL and captures are written back to the Sheet.
-3. **Outreach** — Workflow C sends a personalized cold email showing the prospect the free site made for them, with open/click tracking, an unsubscribe flow, and reply detection.
-4. **Track** — inbound calls (via a tracked phone number), email opens/clicks/replies, and unsubscribes all flow back into the Sheet, with Telegram pings for anything that needs a human.
-
-The orchestration layer (n8n) is documented here rather than shipped as raw exports — the workflows were full of hardcoded endpoints and tokens, so they stay out of the repo on purpose.
+1. **Scrape — Workflow A.** Pulls US local businesses from the Google Places API (name, address, phone, hours, Google reviews, category) into the Sheet, and builds the correct *"leave a review"* link for each (`writereview?placeid=…`). Leads are scored and anything that already has a real website is filtered out (a Playwright site-check tests each prospect's domain).
+2. **Generate — Workflow B.** Picks the next approved lead, calls the generator engine: it selects a template by business type, injects the real business data, builds the Next.js site, deploys it to Vercel under a `*.pandsy.com` subdomain, disables deployment protection, and captures hero + full-page screenshots. The live URL + captures are written back to the Sheet.
+3. **Outreach — Workflow C.** A sender running every 2 minutes: reads the Sheet, filters `approved` leads inside the send window, assigns an inbox + template (rotation across 15 Gmail inboxes, per-inbox daily cap, 18–22 min gap), builds a personalized email with branded tracked links, sends via the Gmail API, and logs everything back to the Sheet (`LEADS` + `SEND-LOG`).
+4. **Track.** Opens, clicks, replies, unsubscribes and inbound calls all flow back into the Sheet, with Telegram pings for anything needing a human.
 
 ---
 
-## Live demo sites
+## The Google Sheet — the brain
 
-Three real sites generated by the pipeline (prospect demos, still live):
+The entire operation was driven by one spreadsheet. No dashboards, no DB UI — just tabs and columns that every workflow reads and writes.
 
-| | |
-|---|---|
-| **MSV33** — multi-brand garage, Arcachon | [msv33.vercel.app](https://msv33.vercel.app) |
-| **Feeling Auto** — dealer + body shop, Biganos | [feelingauto.vercel.app](https://feelingauto.vercel.app) |
-| **EM Automobile** — general garage, Mios | [emautomobile.vercel.app](https://emautomobile.vercel.app) |
+- **FULL LEADS** — the master list: business data, score, status (`scraping_done → approved → emailed → …`), the generated Site URL, and the tracking columns (**Opened / Clicked / Replied / Unsubscribed**) that tick as the campaign runs.
+- **PLANNING** — the week-by-week cold-email roadmap (warmup → ramp → regime).
+- **EMAIL-TEMPLATES**, **SEND-LOG**, **INBOX-STATUS** — template pool, per-send log, and per-inbox daily caps.
+- **SCORE banners** — the list is segmented by lead quality (SCORE 1–4).
 
-![Feeling Auto](docs/screenshots/feelingauto-hero.png)
-![EM Automobile](docs/screenshots/emautomobile-hero.png)
+The cold-email campaign was ramped week by week — warmup → ramp → 375 mails/day across 15 inboxes:
 
-Fully responsive:
+![Cold-email campaign ramp](docs/screenshots/sheet/campaign.jpg)
 
-<img src="docs/screenshots/msv33-mobile.png" alt="Mobile view" width="300" />
+Per-lead tracking, live in the Sheet — template rotation, send time, **open time**, clicks, replies, calls (lead PII redacted):
+
+![Lead tracking columns](docs/screenshots/sheet/tracking.jpg)
+
+---
+
+## The n8n pipeline
+
+Three workflows do the work (shown here from a local re-import of the real exports; credentials stripped).
+
+**Workflow A — Lead Scraper**
+![Workflow A](docs/screenshots/workflows/workflow-a.png)
+
+**Workflow B — Site Generator**
+![Workflow B](docs/screenshots/workflows/workflow-b.png)
+
+**Workflow C — Cold-Email Sender**
+![Workflow C](docs/screenshots/workflows/workflow-c.png)
+
+<details><summary>All workflows (overview)</summary>
+
+![n8n overview](docs/screenshots/workflows/overview.png)
+</details>
+
+---
+
+## The 9 templates
+
+Hand-built Next.js (App Router) + Tailwind templates, polished to WCAG AA — 3 variants per vertical. Every business-specific value is a `{{PLACEHOLDER}}` the generator fills; shown here with showcase demo data.
+
+### Auto Repair
+| Template 1 | Template 2 | Template 3 |
+|---|---|---|
+| ![](docs/screenshots/templates/auto-repair-t-1.png) | ![](docs/screenshots/templates/auto-repair-t-2.png) | ![](docs/screenshots/templates/auto-repair-t-3.png) |
+
+### Electricians
+| Template 1 | Template 2 | Template 3 |
+|---|---|---|
+| ![](docs/screenshots/templates/electricians-t-1.png) | ![](docs/screenshots/templates/electricians-t-2.png) | ![](docs/screenshots/templates/electricians-t-3.png) |
+
+### Plumbers
+| Template 1 | Template 2 | Template 3 |
+|---|---|---|
+| ![](docs/screenshots/templates/plumbers-t-1.png) | ![](docs/screenshots/templates/plumbers-t-2.png) | ![](docs/screenshots/templates/plumbers-t-3.png) |
+
+**Live demos** (showcase data):
+- Auto Repair — [t-1](https://auto-repair-t-1.vercel.app) · [t-2](https://auto-repair-t-2.vercel.app) · [t-3](https://auto-repair-t-3.vercel.app)
+- Electricians — [t-1](https://electricians-t-1.vercel.app) · [t-2](https://electricians-t-2.vercel.app) · [t-3](https://electricians-t-3.vercel.app)
+- Plumbers — [t-1](https://plumbers-t-1.vercel.app) · [t-2](https://plumbers-t-2.vercel.app) · [t-3](https://plumbers-t-3.vercel.app)
 
 ---
 
@@ -75,18 +124,16 @@ Fully responsive:
 
 A small Node/Express service that turns one business's data into a deployed site.
 
-- **Template-based, zero LLM at render time** — deterministic, fast, and free. Data flows into `{{PLACEHOLDER}}` tokens across a Next.js template.
-- **Category normalization** — tolerant of messy source data (`AUTO REPAIR`, `Auto Repair`, `auto-repair`, … → `AUTO_REPAIR`).
-- **Real assets or graceful fallback** — pulls the business's logo/photos from a shared image folder, falls back to template samples or a clean text logo when missing.
-- **Deploy + harden** — deploys to Vercel, then disables Vercel Authentication via the REST API so prospects (and screenshot bots) actually see the site instead of a login wall.
-- **Screenshots** — headless Chromium captures a hero (above-the-fold) and a full-page image, with cookie banners, sticky headers, and lazy-loaded images handled so the capture is clean.
-
-Main files:
+- **Template-based, zero LLM at render time** — deterministic, fast, free. Data flows into `{{PLACEHOLDER}}` tokens.
+- **Category normalization** — tolerant of messy source data (`AUTO REPAIR`, `Auto Repair`, `auto-repair` → `AUTO_REPAIR`).
+- **Real assets or graceful fallback** — pulls the business's logo/photos, falls back to template samples or a clean text logo when missing.
+- **Deploy + harden** — deploys to Vercel, then disables Vercel Authentication via the REST API so prospects (and screenshot bots) see the site, not a login wall.
+- **Screenshots** — headless Chromium captures hero + full-page, handling cookie banners, sticky headers and lazy-loaded images.
 
 | File | Role |
 |---|---|
-| `server.js` | Express API, serial job queue, screenshot static serving |
-| `generate-site-v2.js` | the core: template pick → data injection → build → Vercel deploy → SSO disable |
+| `server.js` | Express API, serial job queue, screenshot serving |
+| `generate-site-v2.js` | core: template pick → data injection → build → Vercel deploy → SSO disable |
 | `pipeline.js` | orchestration helpers |
 | `placeholder-substitute.js` | `{{PLACEHOLDER}}` substitution |
 | `category-detector.js` | business-type normalization |
@@ -95,30 +142,15 @@ Main files:
 
 ---
 
-## The templates (`templates/`)
-
-Hand-built Next.js (App Router) + Tailwind templates, polished to WCAG AA, one folder per vertical:
-
-```
-templates/
-├── AUTO_REPAIR/   Template_1 · Template_2 · Template_3
-├── PLUMBERS/      Template_1 · Template_2 · Template_3
-└── ELECTRICIANS/  Template_1 · Template_2 · Template_3
-```
-
-Each template is a complete site: hero, services, about, gallery, reviews (Google-style), quote + contact forms (serverless routes), cookie consent, legal pages, fully responsive. Every business-specific value is a `{{PLACEHOLDER}}` the generator fills.
-
----
-
 ## Tech stack
 
 - **Generation**: Node.js, Express, Playwright (Chromium)
 - **Sites**: Next.js (App Router), React, TypeScript, Tailwind CSS
-- **Orchestration**: n8n (self-hosted)
+- **Orchestration**: n8n (self-hosted on a Hetzner VPS)
 - **Data**: Google Sheets API (lead database), Google Places API (scraping)
-- **Hosting**: Vercel (per-site deployments)
-- **Email**: Resend / Gmail API, with open/click/reply tracking
-- **Telephony**: tracked phone number with call forwarding + logging
+- **Hosting**: Vercel (per-site deployments, `*.pandsy.com`)
+- **Email**: Gmail API across 15 inboxes + Resend, with open/click/reply tracking
+- **Telephony**: tracked phone number, call forwarding + logging
 - **Alerts**: Telegram
 
 ---
@@ -128,26 +160,30 @@ Each template is a complete site: hero, services, about, gallery, reviews (Googl
 ```
 .
 ├── generator/     Node/Express site-generation engine
-├── templates/     9 Next.js templates (3 verticals × 3 variants)
-├── docs/          screenshots
+├── templates/     9 Next.js templates (3 verticals × 3 variants) + showcase deploy scripts
+├── docs/          screenshots (templates · workflows · sheet)
 ├── .env.example   required environment variables
 └── README.md
 ```
 
 ## Running it (reference)
 
-The engine expects a configured environment and external services (Vercel account, Google APIs, a Sheet). See [`.env.example`](.env.example). This repo is an archive — it is not wired to live infrastructure.
+Archive — not wired to live infrastructure. See [`.env.example`](.env.example).
 
 ```bash
-cd generator
-npm install
-cp ../.env.example .env   # then fill in your own values
+cd generator && npm install && cp ../.env.example .env   # fill in your own values
 node server.js
+```
+
+Deploy the 9 showcase templates to Vercel with demo data:
+
+```bash
+cd templates && VERCEL_SCOPE=your-team node scripts/deploy-showcase.mjs
 ```
 
 ---
 
 ## Notes
 
-- **Private & archived.** This is a personal project kept for the record, not maintained and not open source.
-- **Sanitized.** All real endpoints, IPs, IDs, phone numbers, and credentials were removed before publishing. The n8n workflow exports are intentionally not included.
+- **Private-origin & archived.** Kept for the record, not maintained.
+- **Sanitized.** All real endpoints, IPs, IDs, phone numbers and credentials were removed. The raw n8n workflow exports are intentionally not included — the pipeline is documented instead.
